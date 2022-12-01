@@ -1,4 +1,3 @@
-import { RolesGuard } from 'src/users/auth/guards/roles.guard';
 import { JwtAuthGuard } from './users/auth/guards/jwt-auth.guard';
 import { Post } from './posts/entities/post.entity';
 import { User } from './users/entities/user.entity';
@@ -23,7 +22,7 @@ import { APP_GUARD } from '@nestjs/core';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard
+      useClass: JwtAuthGuard,
     },
   ],
 })

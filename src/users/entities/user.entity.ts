@@ -1,4 +1,3 @@
-
 import { RoleEnum } from './../role.enum';
 import {
   AfterInsert,
@@ -27,10 +26,10 @@ export class User {
   @Exclude()
   password: string;
 
-  @Column({default: false})
+  @Column({ default: false })
   activated: boolean;
 
-  @Column({default: RoleEnum.user})
+  @Column({ default: RoleEnum.user })
   roles: RoleEnum;
 
   @OneToMany(() => Post, (post) => post.user)

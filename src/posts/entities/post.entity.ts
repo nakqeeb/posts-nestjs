@@ -14,7 +14,7 @@ export class Post {
 
   @Column({ default: false })
   approved: boolean;
-    
-  @ManyToOne(() => User, (user) => user.posts, {eager: true} )
+
+  @ManyToOne(() => User, (user) => user.posts, { eager: true })
   user: User;
 }

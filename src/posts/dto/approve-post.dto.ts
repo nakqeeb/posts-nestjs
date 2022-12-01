@@ -1,8 +1,8 @@
 import { IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ActivateUserDto {
+export class ApprovePostDto {
   @ApiProperty()
   @IsBoolean()
-  activated: boolean;
+  approved: boolean;
 }

@@ -16,7 +16,10 @@ import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService,  private jwtService: JwtService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
   async signup(signUpUserDto: SignUpUserDto) {
     const { name, email, password } = signUpUserDto;
     // See if email is in use
@@ -45,13 +48,13 @@ export class AuthService {
     }
 
     if (await bcrypt.compare(password, user.password)) {
-        // Generate JWT Token
-        const payload: JwtPayload = { email };
-        const accessToken: string = await this.jwtService.sign(payload);
-        return {user, accessToken};
-      } else {
-        throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST);
-      }
+      // Generate JWT Token
+      const payload: JwtPayload = { email };
+      const accessToken: string = await this.jwtService.sign(payload);
+      return { user, accessToken };
+    } else {
+      throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async activateUser(id: number, activateUserDto: ActivateUserDto) {
@@ -69,5 +72,4 @@ export class AuthService {
     }
     return this.usersService.update(id, updateRoleDto);
   }
-
 }

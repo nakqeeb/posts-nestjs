@@ -34,7 +34,9 @@ export class SerializeInterceptor implements NestInterceptor {
         // 'plainToClass' is deprecated.
         // return plainToClass(this.dto, data, { excludeExtraneousValues: true });
         // plainToInstance is alternative to plainToClass
-        return plainToInstance(this.dto, data, { excludeExtraneousValues: true });
+        return plainToInstance(this.dto, data, {
+          excludeExtraneousValues: true,
+        });
       }),
     );
   }

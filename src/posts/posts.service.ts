@@ -1,6 +1,10 @@
 import { User } from './../users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -25,7 +29,7 @@ export class PostsService {
     let fetchedPosts: Post[] = [];
     const posts = await this.repo.find();
     for (var post of posts) {
-    //  console.log(post.user);
+      //  console.log(post.user);
       if (post.approved) {
         fetchedPosts.push(post);
       }
@@ -33,7 +37,7 @@ export class PostsService {
     if (fetchedPosts.length === 0) {
       throw new NotFoundException('posts not found');
     }
-   // const fetchedPosts = plainToClass(Post, posts);
+    // const fetchedPosts = plainToClass(Post, posts);
     return fetchedPosts;
   }
   // for auth and non-auth users & also users who have roles 'users'
@@ -51,10 +55,12 @@ export class PostsService {
     const posts = await this.repo.find();
     if (user.roles === RoleEnum.admin || user.roles === RoleEnum.supervisor) {
       for (var post of posts) {
-          fetchedPosts.push(post);
+        fetchedPosts.push(post);
       }
     } else if (user.roles === RoleEnum.user) {
-      throw new UnauthorizedException('you are not allowed to access these data');
+      throw new UnauthorizedException(
+        'you are not allowed to access these data',
+      );
     }
     return fetchedPosts;
   }
@@ -64,15 +70,15 @@ export class PostsService {
     let fetchedPosts: Post[] = [];
     const posts = await this.repo.find();
     for (var post of posts) {
-    //  console.log(post.user);
-    if (user.id === post.user.id) {
+      //  console.log(post.user);
+      if (user.id === post.user.id) {
         fetchedPosts.push(post);
       }
     }
     if (fetchedPosts.length === 0) {
       throw new NotFoundException('posts not found');
     }
-   // const fetchedPosts = plainToClass(Post, posts);
+    // const fetchedPosts = plainToClass(Post, posts);
     return fetchedPosts;
   }
 
@@ -84,7 +90,7 @@ export class PostsService {
     }
     return post;
   }
-  
+
   // for admins and supervisors
   async findOnePost(id: number, user: User) {
     const post = await this.repo.findOneBy({ id });
@@ -120,11 +126,14 @@ export class PostsService {
     return this.repo.save(post);
   }
 
-  async remove(id: number) {
+  async remove(id: number, user: User) {
     const post = await this.repo.findOneBy({ id });
     if (!post) {
       throw new NotFoundException('post not found');
-    };
+    }
+    if (post.user.id !== user.id) {
+      throw new UnauthorizedException('Unauthorized to delete this post');
+    }
     return this.repo.delete(id);
   }
 }

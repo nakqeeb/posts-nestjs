@@ -1,10 +1,13 @@
-import { IsString, MinLength } from "class-validator";
+import { IsString, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePostDto {
-    @IsString()
-    title: string;
+  @ApiProperty()
+  @IsString()
+  title: string;
 
-    @IsString()
-    @MinLength(10)
-    content: string;
+  @ApiProperty()
+  @IsString()
+  @MinLength(10)
+  content: string;
 }

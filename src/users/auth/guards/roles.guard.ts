@@ -25,7 +25,7 @@ export class RolesGuard implements CanActivate {
     return requiredRoles.some((role) => user.roles?.includes(role));
   } */
 
-    // The following code works and the above code is works as well.
+  // The following code works and the above code is works as well.
   canActivate(context: ExecutionContext): boolean {
     // 'roles' should be same as in roles.decorator.ts
     const roles = this.reflector.get<RoleEnum[]>('roles', context.getHandler());
@@ -34,7 +34,7 @@ export class RolesGuard implements CanActivate {
     }
     console.log(roles);
     const request = context.switchToHttp().getRequest();
-   // console.log(request);
+    // console.log(request);
     const user = request.user;
     return this.matchRoles(roles, user.roles);
     // return roles.some((role: RoleEnum) => user.role.includes(role));
@@ -43,5 +43,4 @@ export class RolesGuard implements CanActivate {
   matchRoles(roles: string[], userRole: string) {
     return roles.some((role) => role === userRole);
   }
-
 }

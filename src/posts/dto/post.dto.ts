@@ -6,13 +6,13 @@ export class PostDto {
 
   @Expose()
   title: string;
-  
+
   @Expose()
   content: string;
-  
+
   @Expose()
   approved: boolean;
-  
+
   @Transform(({ obj }) => obj.user.id)
   @Expose()
   userId: number;
