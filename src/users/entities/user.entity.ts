@@ -5,16 +5,19 @@ import {
   AfterUpdate,
   Column,
   Entity,
+  ObjectID,
+  ObjectIdColumn,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Post } from 'src/posts/entities/post.entity';
 import { Exclude } from 'class-transformer';
 
-@Entity()
+@Entity({name: 'users'})
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+   id: ObjectID;
 
   @Column()
   name: string;
@@ -35,7 +38,12 @@ export class User {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @AfterInsert()
+  /* get id() : string{
+    console.log(this._id);
+    return this._id;
+  } */
+
+  /* @AfterInsert()
   logInsert() {
     console.log('Inserted User with id ', this.id);
   }
@@ -48,5 +56,5 @@ export class User {
   @AfterRemove()
   logRemove() {
     console.log('Removed User with id ', this.id);
-  }
+  } */
 }

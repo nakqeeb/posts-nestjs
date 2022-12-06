@@ -10,10 +10,16 @@ import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'postsdb.sqlite',
+      type: 'mongodb',
+      url: 'mongodb+srv://nakqeeb:' +
+      'VmkNU1vgqHFnNCDL' +
+      '@cluster0.rbc72.mongodb.net/posts-app',
       entities: [User, Post],
       synchronize: true,
+      ssl: true,
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      logging: true,
     }),
     PostsModule,
     UsersModule,

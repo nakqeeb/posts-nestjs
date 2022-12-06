@@ -1,9 +1,10 @@
+import { ObjectID } from 'typeorm';
 import { Expose, Type } from 'class-transformer';
 import { RoleEnum } from '../role.enum';
 
 export class UserDto {
   @Expose()
-  id: number;
+  id: ObjectID;
 
   @Expose()
   name: string;

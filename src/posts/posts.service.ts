@@ -1,5 +1,5 @@
 import { User } from './../users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { MongoRepository, Repository } from 'typeorm';
 import {
   Injectable,
   NotFoundException,
@@ -13,7 +13,7 @@ import { RoleEnum } from 'src/users/role.enum';
 
 @Injectable()
 export class PostsService {
-  constructor(@InjectRepository(Post) private repo: Repository<Post>) {}
+  constructor(@InjectRepository(Post) private repo: MongoRepository<Post>) {}
 
   create(createPostDto: CreatePostDto, user: User) {
     if (!user.activated) {

@@ -1,10 +1,10 @@
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, ObjectID, ObjectIdColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  id: string;
 
   @Column()
   title: string;
