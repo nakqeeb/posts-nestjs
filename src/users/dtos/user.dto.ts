@@ -1,10 +1,11 @@
 import { ObjectID } from 'typeorm';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { RoleEnum } from '../role.enum';
 
 export class UserDto {
   @Expose()
-  id: ObjectID;
+  @Transform((from: any) => from.obj.id, { toClassOnly: true }) // to fix: ObjectID changes per serialization
+  id: string;
 
   @Expose()
   name: string;

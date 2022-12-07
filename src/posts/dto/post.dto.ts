@@ -2,7 +2,8 @@ import { Expose, Transform } from 'class-transformer';
 
 export class PostDto {
   @Expose()
-  id: number;
+  @Transform((from: any) => from.obj.id, { toClassOnly: true }) // to fix: ObjectID changes per serialization
+  id: string;
 
   @Expose()
   title: string;
@@ -13,7 +14,7 @@ export class PostDto {
   @Expose()
   approved: boolean;
 
-  @Transform(({ obj }) => obj.user.id)
   @Expose()
-  userId: number;
+  @Transform((from: any) => from.obj.userId, { toClassOnly: true }) // to fix: ObjectID changes per serialization
+  userId: string;
 }

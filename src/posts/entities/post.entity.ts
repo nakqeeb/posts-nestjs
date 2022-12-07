@@ -1,5 +1,6 @@
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, ManyToOne, ObjectID, ObjectIdColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, ObjectIdColumn } from 'typeorm';
+const ObjectId = require('mongodb').ObjectId;
 
 @Entity()
 export class Post {
@@ -15,6 +16,6 @@ export class Post {
   @Column({ default: false })
   approved: boolean;
 
-  @ManyToOne(() => User, (user) => user.posts, { eager: true })
-  user: User;
+  @Column({type: ObjectId})
+  userId: string;
 }

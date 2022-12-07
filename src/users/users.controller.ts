@@ -64,7 +64,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body() activateUserDto: ActivateUserDto,
   ) {
-    return this.authService.activateUser(+id, activateUserDto);
+    return this.authService.activateUser(id, activateUserDto);
   }
 
   @ApiOperation({
@@ -79,7 +79,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateRoleDto: UpdateRoleDto,
   ) {
-    return this.authService.updateUserRole(+id, updateRoleDto);
+    return this.authService.updateUserRole(id, updateRoleDto);
   }
 
   @ApiOperation({

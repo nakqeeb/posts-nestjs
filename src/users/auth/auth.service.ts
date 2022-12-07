@@ -57,7 +57,7 @@ export class AuthService {
     }
   }
 
-  async activateUser(id: number, activateUserDto: ActivateUserDto) {
+  async activateUser(id: string, activateUserDto: ActivateUserDto) {
     const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('user not found');
@@ -65,7 +65,7 @@ export class AuthService {
     return this.usersService.update(id, activateUserDto);
   }
 
-  async updateUserRole(id: number, updateRoleDto: UpdateRoleDto) {
+  async updateUserRole(id: string, updateRoleDto: UpdateRoleDto) {
     const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('user not found');

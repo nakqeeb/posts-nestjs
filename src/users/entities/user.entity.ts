@@ -14,10 +14,11 @@ import {
 import { Post } from 'src/posts/entities/post.entity';
 import { Exclude } from 'class-transformer';
 
+
 @Entity({name: 'users'})
 export class User {
   @ObjectIdColumn()
-   id: ObjectID;
+   id: string;
 
   @Column()
   name: string;
@@ -35,11 +36,8 @@ export class User {
   @Column({ default: RoleEnum.user })
   roles: RoleEnum;
 
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
-
   /* get id() : string{
-    console.log(this._id);
+    // console.log(this._id);
     return this._id;
   } */
 

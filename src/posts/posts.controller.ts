@@ -54,7 +54,7 @@ export class PostsController {
   @Get('/findone/:id')
   @NoAuth()
   findOneApprovedPost(@Param('id') id: string) {
-    return this.postsService.findOneApprovedPost(+id);
+    return this.postsService.findOneApprovedPost(id);
   }
 
   @ApiOperation({
@@ -72,7 +72,7 @@ export class PostsController {
   })
   @Get('/findone/currentuser/:id')
   findOneOfCurrentUserPost(@Param('id') id: string, @GetUser() user: User) {
-    return this.postsService.findOneOfCurrentUserPost(+id, user);
+    return this.postsService.findOneOfCurrentUserPost(id, user);
   }
 
   @ApiOperation({
@@ -94,7 +94,7 @@ export class PostsController {
   @UseGuards(RolesGuard) // AuthGuard/JwtAuthGuard will be executed first and then RolesGuard.
   @Roles(RoleEnum.admin, RoleEnum.supervisor)
   findOnePost(@Param('id') id: string, @GetUser() user: User) {
-    return this.postsService.findOnePost(+id, user);
+    return this.postsService.findOnePost(id, user);
   }
 
   @ApiOperation({
@@ -106,7 +106,7 @@ export class PostsController {
     @Body() updatePostDto: UpdatePostDto,
     @GetUser() user: User,
   ) {
-    return this.postsService.update(+id, updatePostDto, user);
+    return this.postsService.update(id, updatePostDto, user);
   }
 
   @ApiOperation({
@@ -119,7 +119,7 @@ export class PostsController {
     @Param('id') id: string,
     @Body() approvePostDto: ApprovePostDto,
   ) {
-    return this.postsService.changeApproval(+id, approvePostDto.approved);
+    return this.postsService.changeApproval(id, approvePostDto.approved);
   }
 
   @ApiOperation({
@@ -127,7 +127,7 @@ export class PostsController {
   })
   @Delete(':id')
   async remove(@Param('id') id: string, @GetUser() user: User) {
-    await this.postsService.remove(+id, user);
+    await this.postsService.remove(id, user);
     return { message: 'post is deleted successfully' };
   }
 }

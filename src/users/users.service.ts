@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+const ObjectId = require('mongodb').ObjectId; // to convert string to ObjectId
 
 @Injectable()
 export class UsersService {
@@ -21,18 +22,18 @@ export class UsersService {
     return users;
   }
 
-  findOne(id: number) {
+   findOne(id: string) {
     if (!id) {
       return null;
     }
-    return this.repo.findOneBy({ id });
+   return  this.repo.findOneBy( ObjectId(id));
   }
 
   find(email: string) {
     return this.repo.findBy({ email });
   }
 
-  async update(id: number, attrs: Partial<User>) {
+  async update(id: string, attrs: Partial<User>) {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('user not found');
@@ -41,7 +42,7 @@ export class UsersService {
     return this.repo.save(user);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('user not found');

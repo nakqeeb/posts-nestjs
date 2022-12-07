@@ -10,6 +10,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { RoleEnum } from 'src/users/role.enum';
+const ObjectId = require('mongodb').ObjectId;
 
 @Injectable()
 export class PostsService {
@@ -20,7 +21,7 @@ export class PostsService {
       throw new UnauthorizedException('you are not activated yet');
     }
     const post = this.repo.create(createPostDto);
-    post.user = user;
+    post.userId = user.id;
     return this.repo.save(post);
   }
 
@@ -41,8 +42,8 @@ export class PostsService {
     return fetchedPosts;
   }
   // for auth and non-auth users & also users who have roles 'users'
-  async findOneApprovedPost(id: number) {
-    const post = await this.repo.findOneBy({ id });
+  async findOneApprovedPost(id: string) {
+    const post = await this.repo.findOneBy(ObjectId(id));
     if (!post || !post.approved) {
       throw new NotFoundException('post not found');
     }
@@ -70,8 +71,9 @@ export class PostsService {
     let fetchedPosts: Post[] = [];
     const posts = await this.repo.find();
     for (var post of posts) {
-      //  console.log(post.user);
-      if (user.id === post.user.id) {
+      // this is how to compare two mongoDB IDs refer to [https://stackoverflow.com/a/11638106/12636434]
+      // console.log(ObjectId(user.id).equals(ObjectId(post.userId)));
+      if (ObjectId(user.id).equals(ObjectId(post.userId))) {
         fetchedPosts.push(post);
       }
     }
@@ -83,17 +85,17 @@ export class PostsService {
   }
 
   // for current logged-in user only
-  async findOneOfCurrentUserPost(id: number, user: User) {
-    const post = await this.repo.findOneBy({ id });
-    if (!post || user.id !== post.user.id) {
+  async findOneOfCurrentUserPost(id: string, user: User) {
+    const post = await this.repo.findOneBy(ObjectId(id));
+    if (!post || user.id !== post.userId) {
       throw new NotFoundException('post not found');
     }
     return post;
   }
 
   // for admins and supervisors
-  async findOnePost(id: number, user: User) {
-    const post = await this.repo.findOneBy({ id });
+  async findOnePost(id: string, user: User) {
+    const post = await this.repo.findOneBy(ObjectId(id));
     if (!post) {
       throw new NotFoundException('post not found');
     }
@@ -103,12 +105,12 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto, user: User) {
-    const post = await this.repo.findOneBy({ id });
+  async update(id: string, updatePostDto: UpdatePostDto, user: User) {
+    const post = await this.repo.findOneBy(ObjectId(id));
     if (!post) {
       throw new NotFoundException('post not found');
     }
-    if (post.user.id !== user.id) {
+    if (post.userId !== user.id) {
       throw new UnauthorizedException('Unauthorized to edit this post');
     }
     post.title = updatePostDto.title;
@@ -117,8 +119,8 @@ export class PostsService {
     return this.repo.save(post);
   }
 
-  async changeApproval(id: number, approved: boolean) {
-    const post = await this.repo.findOneBy({ id });
+  async changeApproval(id: string, approved: boolean) {
+    const post = await this.repo.findOneBy(ObjectId(id));
     if (!post) {
       throw new NotFoundException('post not found');
     }
@@ -126,12 +128,12 @@ export class PostsService {
     return this.repo.save(post);
   }
 
-  async remove(id: number, user: User) {
-    const post = await this.repo.findOneBy({ id });
+  async remove(id: string, user: User) {
+    const post = await this.repo.findOneBy(ObjectId(id));
     if (!post) {
       throw new NotFoundException('post not found');
     }
-    if (post.user.id !== user.id) {
+    if (post.userId !== user.id) {
       throw new UnauthorizedException('Unauthorized to delete this post');
     }
     return this.repo.delete(id);
