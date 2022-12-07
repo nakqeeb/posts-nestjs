@@ -110,7 +110,7 @@ export class PostsService {
     if (!post) {
       throw new NotFoundException('post not found');
     }
-    if (post.userId !== user.id) {
+    if (!ObjectId(user.id).equals(ObjectId(post.userId))) {
       throw new UnauthorizedException('Unauthorized to edit this post');
     }
     post.title = updatePostDto.title;
@@ -133,7 +133,7 @@ export class PostsService {
     if (!post) {
       throw new NotFoundException('post not found');
     }
-    if (post.userId !== user.id) {
+    if (!ObjectId(user.id).equals(ObjectId(post.userId))) {
       throw new UnauthorizedException('Unauthorized to delete this post');
     }
     return this.repo.delete(id);
