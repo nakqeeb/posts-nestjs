@@ -8,11 +8,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
 
-  'http://localhost:3000/api'
+  ('http://localhost:3000/api');
   const config = new DocumentBuilder()
     .setTitle('Posts-NestJS')
     .setDescription(
-      'This is backend for Posts App. \n\n Do not forget to Register/Login first in order to get the auth token.',
+      'This is backend for Posts App. \n\n Do not forget to Register/Login first in order to get the auth token. \n\n ADMIN Account { "email": "admin@test.com", "password": "123456" }',
     )
     .setVersion('1.0')
     .addTag('Posts API')
