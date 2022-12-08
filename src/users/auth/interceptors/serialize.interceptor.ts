@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
   CallHandler,
   ExecutionContext,
   NestInterceptor,
   UseInterceptors,
 } from '@nestjs/common';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { map, Observable } from 'rxjs';
 
 // S10 L8
