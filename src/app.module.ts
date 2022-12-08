@@ -10,8 +10,12 @@ import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'postsdb.sqlite',
+      type: 'postgres',
+      host: 'localhost',
+      port: 5442,
+      username: 'postgres',
+      password: '123456',
+      database: 'posts-backend',
       entities: [User, Post],
       synchronize: true,
     }),
