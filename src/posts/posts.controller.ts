@@ -1,3 +1,5 @@
+import { InvoicesPdfService } from './pdf/invoices-pdf/invoices-pdf.service';
+import { PdfService } from './pdf/pdf/pdf.service';
 import { ApprovePostDto } from './dto/approve-post.dto';
 import { PostDto } from './dto/post.dto';
 import { User } from './../users/entities/user.entity';
@@ -11,7 +13,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
+  Res,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -28,7 +30,11 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller('posts')
 @Serialize(PostDto)
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private postsService: PostsService,
+    private pdfService: PdfService,
+    private invoicesPdfService: InvoicesPdfService,
+  ) {}
 
   @ApiOperation({
     summary:
@@ -115,10 +121,7 @@ export class PostsController {
   @Patch('/:id/approved')
   @UseGuards(RolesGuard) // AuthGuard/JwtAuthGuard will be executed first and then RolesGuard.
   @Roles(RoleEnum.admin, RoleEnum.supervisor)
-  approvePost(
-    @Param('id') id: string,
-    @Body() approvePostDto: ApprovePostDto,
-  ) {
+  approvePost(@Param('id') id: string, @Body() approvePostDto: ApprovePostDto) {
     return this.postsService.changeApproval(+id, approvePostDto.approved);
   }
 
@@ -129,5 +132,68 @@ export class PostsController {
   async remove(@Param('id') id: string, @GetUser() user: User) {
     await this.postsService.remove(+id, user);
     return { message: 'post is deleted successfully' };
+  }
+
+  // pdf
+  @ApiOperation({
+    summary: 'Generate PDF file for all the posts by the admin & supervisor',
+  })
+  @Get('/pdf')
+  @UseGuards(RolesGuard) // AuthGuard/JwtAuthGuard will be executed first and then RolesGuard.
+  @Roles(RoleEnum.admin, RoleEnum.supervisor)
+  async getPDF(@Res() res: any, @GetUser() user: User): Promise<void> {
+    const buffer = await this.pdfService.generatePDF(user);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename=mono-posts.pdf',
+      'Content-Length': buffer.length,
+    });
+
+    res.end(buffer);
+  }
+
+  // test
+  @Get('/test/pdf')
+  @NoAuth()
+  async getTestPDF(@Res() res: any): Promise<void> {
+    const invoice = {
+      shipping: {
+        name: 'John Doe',
+        address: '1234 Main Street',
+        city: 'San Francisco',
+        state: 'CA',
+        country: 'US',
+        postal_code: 94111,
+      },
+      items: [
+        {
+          item: 'TC 100',
+          description: 'Toner Cartridge',
+          quantity: 2,
+          amount: 6000,
+        },
+        {
+          item: 'USB_EXT',
+          description: 'USB Cable Extender',
+          quantity: 1,
+          amount: 2000,
+        },
+      ],
+      subtotal: 8000,
+      paid: 0,
+      invoice_nr: 1234,
+    };
+
+    const buffer = await this.invoicesPdfService.generatePDF(
+      invoice,
+      'invoice.pdf',
+    );
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename=example.pdf',
+      'Content-Length': buffer.length,
+    });
+
+    res.end(buffer);
   }
 }

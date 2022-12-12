@@ -26,9 +26,9 @@ export class PostsService {
 
   // for auth and non-auth users & also users who have roles 'users'
   async findAllApprovedPost() {
-    let fetchedPosts: Post[] = [];
+    const fetchedPosts: Post[] = [];
     const posts = await this.repo.find();
-    for (var post of posts) {
+    for (const post of posts) {
       //  console.log(post.user);
       if (post.approved) {
         fetchedPosts.push(post);
@@ -51,10 +51,10 @@ export class PostsService {
 
   // for admins and supervisors
   async findAllPosts(user: User) {
-    let fetchedPosts: Post[] = [];
+    const fetchedPosts: Post[] = [];
     const posts = await this.repo.find();
     if (user.roles === RoleEnum.admin || user.roles === RoleEnum.supervisor) {
-      for (var post of posts) {
+      for (const post of posts) {
         fetchedPosts.push(post);
       }
     } else if (user.roles === RoleEnum.user) {
@@ -67,9 +67,9 @@ export class PostsService {
 
   // for current logged-in user only
   async findAllCurrentUserPosts(user: User) {
-    let fetchedPosts: Post[] = [];
+    const fetchedPosts: Post[] = [];
     const posts = await this.repo.find();
-    for (var post of posts) {
+    for (const post of posts) {
       //  console.log(post.user);
       if (user.id === post.user.id) {
         fetchedPosts.push(post);
