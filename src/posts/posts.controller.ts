@@ -153,6 +153,9 @@ export class PostsController {
   }
 
   // test
+  @ApiOperation({
+    summary: 'Just for testing purpose',
+  })
   @Get('/test/pdf')
   @NoAuth()
   async getTestPDF(@Res() res: any): Promise<void> {
