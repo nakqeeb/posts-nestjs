@@ -134,6 +134,7 @@ export class PostsService {
     if (post.user.id !== user.id) {
       throw new UnauthorizedException('Unauthorized to delete this post');
     }
+    //return this.repo.remove(post);
     return this.repo.delete(id);
   }
 }
