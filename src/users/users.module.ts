@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { AuthService } from './auth/auth.service';
@@ -26,9 +26,20 @@ import { RolesGuard } from './auth/guards/roles.guard';
       }),
     }), */
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
+    /* JwtModule.register({
       secret: 'super_secret_dont_tell',
       signOptions: { expiresIn: '9h' },
+    }), */
+    JwtModule.registerAsync({
+      useFactory: (config: ConfigService) => {
+        return {
+          secret: config.get<string>('JWT_SECRET_KEY'),
+          signOptions: {
+            expiresIn: config.get<string | number>('JWT_EXPIRATION_TIME'),
+          },
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   providers: [UsersService, AuthService, JwtStrategy, RolesGuard],

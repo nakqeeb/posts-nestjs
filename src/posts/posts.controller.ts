@@ -1,4 +1,3 @@
-import { InvoicesPdfService } from './pdf/invoices-pdf/invoices-pdf.service';
 import { PdfService } from './pdf/pdf/pdf.service';
 import { ApprovePostDto } from './dto/approve-post.dto';
 import { PostDto } from './dto/post.dto';
@@ -32,8 +31,8 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 export class PostsController {
   constructor(
     private postsService: PostsService,
+    // private invoicesPdfService: InvoicesPdfService,
     private pdfService: PdfService,
-    private invoicesPdfService: InvoicesPdfService,
   ) {}
 
   @ApiOperation({
@@ -152,8 +151,8 @@ export class PostsController {
     res.end(buffer);
   }
 
-  // test
-  @ApiOperation({
+  // testing purpose
+  /* @ApiOperation({
     summary: 'Just for testing purpose',
   })
   @Get('/test/pdf')
@@ -198,5 +197,5 @@ export class PostsController {
     });
 
     res.end(buffer);
-  }
+  } */
 }
