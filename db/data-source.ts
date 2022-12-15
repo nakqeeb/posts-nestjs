@@ -26,7 +26,7 @@ switch (process.env.NODE_ENV) {
   case 'production':
     Object.assign(dataSourceOptions, {
       type: 'postgres',
-      url: process.env.DATABASE_URL, // DATABASE_URL variable is provided by Heroku
+      url: process.env.DATABASE_URL,
       migrationsRun: true,
       entities: ['dist/**/*.entity.js'],
       ssl: {
