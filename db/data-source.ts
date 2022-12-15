@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-const dotenv = require('dotenv');
-const parsed = dotenv.config({ path: '.env.production' });
+/* const dotenv = require('dotenv');
+const parsed = dotenv.config({ path: '.env.production' }); */
 export const dataSourceOptions: DataSourceOptions = {
   //   type: 'sqlite',
   //   database: 'postsdb.sqlite',
@@ -29,7 +29,7 @@ switch (process.env.NODE_ENV) {
   case 'production':
     Object.assign(dataSourceOptions, {
       type: 'postgres',
-      url: parsed.parsed.DATABASE_URL,
+      url: process.env.DATABASE_URL,
       migrationsRun: true,
       entities: ['dist/**/*.entity.js'],
       ssl: {
@@ -38,7 +38,7 @@ switch (process.env.NODE_ENV) {
     });
     break;
   default:
-    // Object.assign(dbConfig, {
+    // Object.assign(dataSourceOptions, {
     //   type: 'postgres',
     //   url: parsed.parsed.DATABASE_URL,
     //   migrationsRun: true,
