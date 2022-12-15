@@ -1,4 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const dotenv = require('dotenv');
+const parsed = dotenv.config({ path: '.env.production' });
 
 export const dataSourceOptions: DataSourceOptions = {
   //   type: 'sqlite',
@@ -35,16 +38,17 @@ switch (process.env.NODE_ENV) {
     });
     break;
   default:
-    // Object.assign(dbConfig, {
-    //   type: 'postgres',
-    //   url: parsed.parsed.DATABASE_URL,
-    //   migrationsRun: true,
-    //   entities: ['**/*.entity.js'],
-    //   ssl: {
-    //     rejectUnauthorized: false,
-    //   },
-    // });
-    throw new Error('unknown environment');
+    Object.assign(dataSourceOptions, {
+      type: 'postgres',
+      url: parsed.parsed.DATABASE_URL,
+      migrationsRun: true,
+      entities: ['**/*.entity.js'],
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
+    break;
+  // throw new Error('unknown environment');
 }
 
 //console.log(process.env.DATABASE_URL);
