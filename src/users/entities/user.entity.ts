@@ -11,7 +11,7 @@ import {
 import { Post } from 'src/posts/entities/post.entity';
 import { Exclude } from 'class-transformer';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
