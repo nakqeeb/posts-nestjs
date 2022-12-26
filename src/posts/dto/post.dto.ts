@@ -1,4 +1,4 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
 export class PostDto {
   @Expose()
@@ -13,7 +13,6 @@ export class PostDto {
   @Expose()
   approved: boolean;
 
-  @Transform(({ obj }) => obj.user.id)
   @Expose()
   userId: number;
 }

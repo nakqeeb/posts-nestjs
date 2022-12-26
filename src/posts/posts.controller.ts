@@ -2,7 +2,6 @@ import { InvoicesPdfService } from './pdf/invoices-pdf/invoices-pdf.service';
 import { PdfService } from './pdf/pdf/pdf.service';
 import { ApprovePostDto } from './dto/approve-post.dto';
 import { PostDto } from './dto/post.dto';
-import { User } from './../users/entities/user.entity';
 import { RoleEnum } from './../users/role.enum';
 import {
   Controller,
@@ -24,6 +23,7 @@ import { NoAuth } from 'src/users/auth/decorators/no-auth.decorator';
 import { GetUser } from 'src/users/auth/decorators/get-user.decorator';
 import { Serialize } from 'src/users/auth/interceptors/serialize.interceptor';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 
 @ApiBearerAuth('JWT-auth') // This is the one that needs to match the name in main.ts
 @ApiTags('Posts')
@@ -122,7 +122,7 @@ export class PostsController {
   @UseGuards(RolesGuard) // AuthGuard/JwtAuthGuard will be executed first and then RolesGuard.
   @Roles(RoleEnum.admin, RoleEnum.supervisor)
   approvePost(@Param('id') id: string, @Body() approvePostDto: ApprovePostDto) {
-    return this.postsService.changeApproval(+id, approvePostDto.approved);
+    return this.postsService.changeApproval(+id, approvePostDto);
   }
 
   @ApiOperation({

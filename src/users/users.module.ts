@@ -1,5 +1,4 @@
-import { User } from './entities/user.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { PrismaModule } from './../prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -12,19 +11,8 @@ import { RolesGuard } from './auth/guards/roles.guard';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    PrismaModule,
     ConfigModule,
-    /* PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('super_secret_dont_tell'),
-        signOptions: {
-          expiresIn: 3600,
-        },
-      }),
-    }), */
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'super_secret_dont_tell',

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Post } from 'src/posts/entities/post.entity';
 import { PostsService } from './../../posts.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Post, User } from '@prisma/client';
 // import * as PDFDocument from 'pdfkit';
 // import * as fs from 'fs';
 const PDFDocument = require('pdfkit-table');
-import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PdfService {
@@ -59,7 +58,7 @@ export class PdfService {
         post.title,
         post.content,
         post.approved,
-        post.user.id,
+        post.userId,
       ]);
     }
     await doc.fillOpacity(1).table(
