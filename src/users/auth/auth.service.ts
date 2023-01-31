@@ -51,7 +51,7 @@ export class AuthService {
       // Generate JWT Token
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
-      return { user, accessToken };
+      return { user, accessToken, expiresIn: 540 };
     } else {
       throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST);
     }
