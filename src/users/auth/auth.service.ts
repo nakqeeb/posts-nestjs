@@ -13,12 +13,14 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users.service';
 import { JwtPayload } from './jwt-payload.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
   async signup(signUpUserDto: SignUpUserDto) {
     const { name, email, password } = signUpUserDto;
@@ -51,7 +53,7 @@ export class AuthService {
       // Generate JWT Token
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
-      const expiresIn = 540;
+      const expiresIn = this.configService.get<string>('JWT_EXPIRATION_TIME');
       return { user, accessToken, expiresIn };
     } else {
       throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST);
