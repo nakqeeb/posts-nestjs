@@ -51,25 +51,17 @@ export class AuthService {
       // Generate JWT Token
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
-      return { user, accessToken, expiresIn: 540 };
+      return { user, accessToken };
     } else {
       throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST);
     }
   }
 
-  async activateUser(id: number, activateUserDto: ActivateUserDto) {
-    const user = await this.usersService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('user not found');
-    }
+  activateUser(id: number, activateUserDto: ActivateUserDto) {
     return this.usersService.update(id, activateUserDto);
   }
 
-  async updateUserRole(id: number, updateRoleDto: UpdateRoleDto) {
-    const user = await this.usersService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('user not found');
-    }
+  updateUserRole(id: number, updateRoleDto: UpdateRoleDto) {
     return this.usersService.update(id, updateRoleDto);
   }
 }

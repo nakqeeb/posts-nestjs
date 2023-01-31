@@ -48,8 +48,9 @@ export class UsersController {
   @Post('/signin')
   @Serialize(UserResponseDto)
   @NoAuth()
-  signIn(@Body() signInUserDto: SignInUserDto) {
-    return this.authService.signin(signInUserDto);
+  async signIn(@Body() signInUserDto: SignInUserDto) {
+    const response = await this.authService.signin(signInUserDto);
+    return { response, expiresIn: 540 };
   }
 
   @ApiOperation({
