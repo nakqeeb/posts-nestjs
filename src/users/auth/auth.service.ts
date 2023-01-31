@@ -54,7 +54,9 @@ export class AuthService {
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
       const expiresIn = this.configService.get<string>('JWT_EXPIRATION_TIME');
-      return { user, accessToken, expiresIn };
+      const expiresInSeconds = Number.parseInt(expiresIn) * 60;
+      console.log(expiresInSeconds);
+      return { user, accessToken, expiresInSeconds };
     } else {
       throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST);
     }

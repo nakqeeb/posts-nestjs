@@ -25,4 +25,7 @@ export class UserResponseDto {
 
   @Expose()
   accessToken: string;
+
+  @Expose()
+  expiresInSeconds: string;
 }
